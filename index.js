@@ -819,7 +819,7 @@ function getSelectedDNS() {
     if (document.getElementById('cf').checked) {
         return "1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001";
     } else if (document.getElementById('malw').checked) {
-        return "84.21.189.133, 2a12:bec4:1460:d5::2, 64.188.98.242, 2a01:ecc0:2c1:2::2";
+        return "84.21.189.133, 193.23.209.189, 2a12:bec4:1460:294::2, 2a01:ecc0:680:120::2";
     } else if (document.getElementById('xbox').checked) {
         return "176.99.11.77, 80.78.247.254, 31.192.108.180, 2a00:f940:2:4:2::5d1b, 2a00:f940:2:4:2::21ed";
 	} else if (document.getElementById('geohide').checked) {
