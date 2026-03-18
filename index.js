@@ -41,10 +41,6 @@ function generateRandomEndpoint() {
         'FL2': 'fi.tribukvy.ltd'     // Финляндия 2
     };
     
-    if (port === 4500) {
-        port = 4501;
-    }
-    
     const endpoint = serverMap[selectedServer] || 'de.tribukvy.ltd'; // По умолчанию Германия
     return `${endpoint}:${port}`;
 }
