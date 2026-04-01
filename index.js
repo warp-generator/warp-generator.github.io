@@ -32,7 +32,8 @@ function generateRandomEndpoint() {
     
 
     const serverMap = {
-		'PL': 'pl.tribukvy.ltd',     // Польша
+		'PL1': 'pl.tribukvy.ltd',     // Польша 1 
+		'PL2': 'pl0.tribukvy.ltd',     // Польша 2
 		'DE': 'de.tribukvy.ltd',     // Германия
 		'RU': 'ru0.tribukvy.ltd',     // Россия
 		'EE': 'ee.tribukvy.ltd',     // Эстония 
