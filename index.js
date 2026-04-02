@@ -1,22 +1,15 @@
-const AWG = document.querySelector('.get-btn1');
-const AWGm1 = document.querySelector('.get-btn2');
-const AWGm2 = document.querySelector('.get-btn3');
-const AWGm3 = document.querySelector('.get-btn4');
-const Clash = document.querySelector('.get-btn5');
-const Throne = document.querySelector('.get-btn6');
-const Neko = document.querySelector('.get-btn7');
-const Husi = document.querySelector('.get-btn8');
-const Karing = document.querySelector('.get-btn9');
-const WireSock = document.querySelector('.get-btn10');
+const AWGm1 = document.getElementById('generateButton1');
+const AWGm2 = document.getElementById('generateButton2');
+const AWGm3 = document.getElementById('generateButton3');
+const Clash = document.getElementById('generateButton4');
+const WireSock = document.getElementById('generateButton5');
 const container = document.querySelector('.container');
 
 function generateRandomEndpoint() {
     const ports = [500, 854, 859, 864, 878, 880, 890, 891, 894, 903, 908, 928, 934, 939, 942, 943, 945, 946, 955, 968, 987, 988, 1002, 1010, 1014, 1018, 1070, 1074, 1180, 1387, 1701, 1843, 2371, 2408, 2506, 3138, 3476, 3581, 3854, 4177, 4198, 4233, 4500, 5279, 5956, 7103, 7152, 7156, 7281, 7559, 8319, 8742, 8854, 8886];
     
-
     const selectedServer = getSelectedServer();
     let port = ports[Math.floor(Math.random() * ports.length)];
-    
 
     if (selectedServer === 'def') {
         const prefixes = ["162.159.192.", "162.159.195.", "engage.cloudflareclient.com"];
@@ -29,7 +22,6 @@ function generateRandomEndpoint() {
             return `${prefix}${randomNumber}:${port}`;
         }
     }
-    
 
     const serverMap = {
 		'PL1': 'pl.tribukvy.ltd',     // Польша 1 
@@ -47,7 +39,6 @@ function generateRandomEndpoint() {
     return `${endpoint}:${port}`;
 }
 
-// Добавляем функцию для получения выбранного сервера
 function getSelectedServer() {
     const serverRadios = document.getElementsByName('server');
     for (let radio of serverRadios) {
@@ -56,14 +47,6 @@ function getSelectedServer() {
         }
     }
     return 'def'; // По умолчанию стандартный
-}
-
-function getRandomJcParams() {
-    const options = [
-        "Jc = 4\nJmin = 40\nJmax = 70",
-        "Jc = 120\nJmin = 23\nJmax = 911"
-    ];
-    return options[Math.floor(Math.random() * options.length)];
 }
 
 const fetchWithTimeout = async (url, options = {}, timeout = 3000) => {
@@ -243,10 +226,11 @@ const generateReserved = (clientId) =>
 const showPopup = (message, type = 'success') => {
     const popup = document.createElement('div');
     popup.className = 'popup-message';
-    popup.textContent = message;
+    popup.innerHTML = message;
     
     if (type === 'error') {
         popup.style.backgroundColor = '#d32f2f';
+		popup.style.textAlign = 'center';
     }
     
     document.body.appendChild(popup);
@@ -270,59 +254,9 @@ const downloadConfig = (fileName, content) => {
 	
 };
 
-// AWG
-AWG.addEventListener('click', async () => {
-    	const button = document.getElementById('generateButton1');
-    const status = document.getElementById('status');
-    const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
-    button.disabled = true;
-    button.classList.add("button--loading");
-    try {
-        const { publicKey, privateKey } = await fetchKeys();
-        const installId = generateRandomString(22);
-        const fcmToken = `${installId}:APA91b${generateRandomString(134)}`;
-        const accountData = await fetchAccount(publicKey, installId, fcmToken);
-		const selectedDNS = getSelectedDNS();
-		const allowedIPs = getSelectedSites();
-		const randomEndpoint = generateRandomEndpoint();
-		const wireGuardText = `[Interface]
-PrivateKey = ${privateKey}
-Address = ${accountData.config.interface.addresses.v4}, ${accountData.config.interface.addresses.v6}
-DNS = ${selectedDNS}
-MTU = 1280
-S1 = 0
-S2 = 0
-Jc = 4
-Jmin = 40
-Jmax = 70
-H1 = 1
-H2 = 2
-H3 = 3
-H4 = 4
-
-[Peer]
-PublicKey = ${accountData.config.peers[0].public_key}
-AllowedIPs = ${allowedIPs}
-Endpoint = ${randomEndpoint}`;
-	    const content = wireGuardText || "No configuration available";
-    if (content === "No configuration available") {
-        showPopup('No configuration to download', 'Ошибка');
-        return;
-    }
-    downloadConfig(`WARPr_${randomNumber}.conf`, content);
-    showPopup('Скачивание конфигурации');
-    } catch (error) {
-        console.error('Error processing configuration:', error);
-showPopup('Failed to generate config. Please try again.', 'error');
-    } finally {
-        button.disabled = false;
-        button.classList.remove("button--loading");
-    } 
-});
-
 // AWGm1
 AWGm1.addEventListener('click', async () => {
-	const button = document.getElementById('generateButton2');
+	const button = document.getElementById('generateButton1');
     const status = document.getElementById('status');
 	const randomEndpoint = generateRandomEndpoint();
 	const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
@@ -365,7 +299,7 @@ Endpoint = ${randomEndpoint}`;
     showPopup('Скачивание конфигурации');
     } catch (error) {
         console.error('Error processing configuration:', error);
-showPopup('Failed to generate config. Please try again.', 'error');
+showPopup('Ошибка. Подождите несколько минут или воспользуйтесь <a href="https://warp-generator-config.vercel.app/" target="_blank" style="color: #fff; text-decoration: underline; font-weight: bold;">зеркалом</a>', 'error');
     } finally {
         button.disabled = false;
         button.classList.remove("button--loading");
@@ -375,7 +309,7 @@ showPopup('Failed to generate config. Please try again.', 'error');
 
 // AWGm2
 AWGm2.addEventListener('click', async () => {
-    	const button = document.getElementById('generateButton3');
+    	const button = document.getElementById('generateButton2');
     const status = document.getElementById('status');
 	const randomEndpoint = generateRandomEndpoint();
     const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
@@ -387,7 +321,6 @@ AWGm2.addEventListener('click', async () => {
         const fcmToken = `${installId}:APA91b${generateRandomString(134)}`;
         const accountData = await fetchAccount(publicKey, installId, fcmToken);
 		const randomEndpoint = generateRandomEndpoint();
-		const jcParams = getRandomJcParams();
 		const selectedDNS = getSelectedDNS();
 		const allowedIPs = getSelectedSites();
 		const wireGuardText = `[Interface]
@@ -419,7 +352,7 @@ Endpoint = ${randomEndpoint}`;
     showPopup('Скачивание конфигурации');
     } catch (error) {
         console.error('Error processing configuration:', error);
-showPopup('Failed to generate config. Please try again.', 'error');
+showPopup('Ошибка. Подождите несколько минут или воспользуйтесь <a href="https://warp-generator-config.vercel.app/" target="_blank" style="color: #fff; text-decoration: underline; font-weight: bold;">зеркалом</a>', 'error');
     } finally {
         button.disabled = false;
         button.classList.remove("button--loading");
@@ -428,7 +361,7 @@ showPopup('Failed to generate config. Please try again.', 'error');
 
 // AWGm3
 AWGm3.addEventListener('click', async () => {
-    	const button = document.getElementById('generateButton4');
+    	const button = document.getElementById('generateButton3');
     const status = document.getElementById('status');
 	const randomEndpoint = generateRandomEndpoint();
     const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
@@ -440,7 +373,6 @@ AWGm3.addEventListener('click', async () => {
         const fcmToken = `${installId}:APA91b${generateRandomString(134)}`;
         const accountData = await fetchAccount(publicKey, installId, fcmToken);
 		const randomEndpoint = generateRandomEndpoint();
-		const jcParams = getRandomJcParams();
 		const selectedDNS = getSelectedDNS();
 		const allowedIPs = getSelectedSites();
 		const wireGuardText = `[Interface]
@@ -473,16 +405,16 @@ Endpoint = ${randomEndpoint}`;
     showPopup('Скачивание конфигурации');
     } catch (error) {
         console.error('Error processing configuration:', error);
-showPopup('Failed to generate config. Please try again.', 'error');
+showPopup('Ошибка. Подождите несколько минут или воспользуйтесь <a href="https://warp-generator-config.vercel.app/" target="_blank" style="color: #fff; text-decoration: underline; font-weight: bold;">зеркалом</a>', 'error');
     } finally {
         button.disabled = false;
         button.classList.remove("button--loading");
     } 
 });
 
-// Clash-----
+// Clash
 Clash.addEventListener('click', async () => {
-    const button = document.getElementById('generateButton5');
+    const button = document.getElementById('generateButton4');
     const status = document.getElementById('status');
     const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
     button.disabled = true;
@@ -512,9 +444,9 @@ proxies:
 - name: "AWG 1.5 (1 Вариант)"
   <<: *warp-common
   amnezia-wg-option:
-   jc: 120
-   jmin: 23
-   jmax: 911
+   jc: 4
+   jmin: 40
+   jmax: 70
    s1: 0
    s2: 0
    h1: 1
@@ -525,9 +457,9 @@ proxies:
 - name: "AWG 1.5 (2 Вариант)"
   <<: *warp-common
   amnezia-wg-option:
-   jc: 120
-   jmin: 23
-   jmax: 911
+   jc: 4
+   jmin: 40
+   jmax: 70
    s1: 0
    s2: 0
    h1: 1
@@ -538,9 +470,9 @@ proxies:
 - name: "AWG 1.5 (3 Вариант)"
   <<: *warp-common
   amnezia-wg-option:
-   jc: 120
-   jmin: 23
-   jmax: 911
+   jc: 4
+   jmin: 40
+   jmax: 70
    s1: 0
    s2: 0
    h1: 1
@@ -549,8 +481,6 @@ proxies:
    h3: 4   
    i1: <b 0x494e56495445207369703a626f624062696c6f78692e636f6d205349502f322e300d0a5669613a205349502f322e302f55445020706333332e61746c616e74612e636f6d3b6272616e63683d7a39684734624b3737366173646864730d0a4d61782d466f7277617264733a2037300d0a546f3a20426f62203c7369703a626f624062696c6f78692e636f6d3e0d0a46726f6d3a20416c696365203c7369703a616c6963654061746c616e74612e636f6d3e3b7461673d313932383330313737340d0a43616c6c2d49443a20613834623463373665363637313040706333332e61746c616e74612e636f6d0d0a435365713a2033313431353920494e564954450d0a436f6e746163743a203c7369703a616c69636540706333332e61746c616e74612e636f6d3e0d0a436f6e74656e742d547970653a206170706c69636174696f6e2f7364700d0a436f6e74656e742d4c656e6774683a20300d0a0d0a>
    i2: <b 0x5349502f322e302031303020547279696e670d0a5669613a205349502f322e302f55445020706333332e61746c616e74612e636f6d3b6272616e63683d7a39684734624b3737366173646864730d0a546f3a20426f62203c7369703a626f624062696c6f78692e636f6d3e0d0a46726f6d3a20416c696365203c7369703a616c6963654061746c616e74612e636f6d3e3b7461673d313932383330313737340d0a43616c6c2d49443a20613834623463373665363637313040706333332e61746c616e74612e636f6d0d0a435365713a2033313431353920494e564954450d0a436f6e74656e742d4c656e6774683a20300d0a0d0a>
-   j1: <b 0xabcdef1234567890>
-   itime: 120
   
 proxy-groups:
 - name: WARP
@@ -571,173 +501,7 @@ proxy-groups:
     showPopup('Скачивание конфигурации');
     } catch (error) {
         console.error('Error processing configuration:', error);
-showPopup('Failed to generate config. Please try again.', 'error');
-    } finally {
-        button.disabled = false;
-        button.classList.remove("button--loading");
-    } 
-});
-
-// Throne
-Throne.addEventListener('click', async () => {
-    const button = document.getElementById('generateButton6');
-    button.disabled = true;
-    button.classList.add("button--loading");
-    try {
-        const { publicKey, privateKey } = await fetchKeys();
-        const installId = generateRandomString(22);
-        const fcmToken = `${installId}:APA91b${generateRandomString(134)}`;
-        const accountData = await fetchAccount(publicKey, installId, fcmToken);
-        const reserved = generateReserved(accountData.config.client_id).replace(/, /g, '-');
-        const privateKeyWithoutEqual = privateKey.replace(/=$/, '');
-        const wireGuardText = `wg://162.159.192.1:500?private_key=${privateKeyWithoutEqual}%3D&peer_public_key=bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo%3D&pre_shared_key=&reserved=${reserved}&persistent_keepalive=0&mtu=1280&use_system_interface=false&local_address=${accountData.config.interface.addresses.v4}/32-${accountData.config.interface.addresses.v6}/128&workers=0&enable_amnezia=true&junk_packet_count=4&junk_packet_min_size=40&junk_packet_max_size=70&init_packet_junk_size=0&response_packet_junk_size=0&init_packet_magic_header=1&response_packet_magic_header=2&underload_packet_magic_header=3&transport_packet_magic_header=4#WARP`;
-
-        // Показываем модальное окно с конфигурацией
-        document.getElementById('throneText').value = wireGuardText;
-        modal2.style.display = "block";
-        
-    } catch (error) {
-        console.error('Error processing configuration:', error);
-        showPopup('Failed to generate config. Please try again.', 'error');
-    } finally {
-        button.disabled = false;
-        button.classList.remove("button--loading");
-    } 
-});
-
-// Neko
-Neko.addEventListener('click', async () => {
-    	const button = document.getElementById('generateButton7');
-    const status = document.getElementById('status');
-    const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
-    button.disabled = true;
-    button.classList.add("button--loading");
-    try {
-        const { publicKey, privateKey } = await fetchKeys();
-        const installId = generateRandomString(22);
-        const fcmToken = `${installId}:APA91b${generateRandomString(134)}`;
-        const accountData = await fetchAccount(publicKey, installId, fcmToken);
-		const reserved = generateReserved(accountData.config.client_id);
-		const wireGuardText = `{
-"mtu": 1280,
-"reserved": [${reserved}],
-"private_key": "${privateKey}",
-"type": "wireguard",
-"local_address": ["${accountData.config.interface.addresses.v4}/32", "${accountData.config.interface.addresses.v6}/128"],
-"peer_public_key": "${accountData.config.peers[0].public_key}",
-"server": "162.159.192.1",
-"server_port": 500
-}`;
-	    const content = wireGuardText || "No configuration available";
-    if (content === "No configuration available") {
-        showPopup('No configuration to download', 'Ошибка');
-        return;
-    }
-    downloadConfig(`NekoWARP_${randomNumber}.conf`, content);
-    showPopup('Скачивание конфигурации');
-    } catch (error) {
-        console.error('Error processing configuration:', error);
-showPopup('Failed to generate config. Please try again.', 'error');
-    } finally {
-        button.disabled = false;
-        button.classList.remove("button--loading");
-    } 
-});
-
-// Husi
-Husi.addEventListener('click', async () => {
-    	const button = document.getElementById('generateButton8');
-    const status = document.getElementById('status');
-    const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
-    button.disabled = true;
-    button.classList.add("button--loading");
-    try {
-        const { publicKey, privateKey } = await fetchKeys();
-        const installId = generateRandomString(22);
-        const fcmToken = `${installId}:APA91b${generateRandomString(134)}`;
-        const accountData = await fetchAccount(publicKey, installId, fcmToken);
-		const reserved = generateReserved(accountData.config.client_id);
-		const wireGuardText = `{
-"type": "wireguard",
-"tag": "proxy",
-"mtu": 1280,
-"address": ["${accountData.config.interface.addresses.v4}/32", "${accountData.config.interface.addresses.v6}/128"],
-"private_key": "${privateKey}",
-"listen_port": 0,
-"peers": [
-{
-"address": "162.159.192.1",
-"port": 500,
-"public_key": "${accountData.config.peers[0].public_key}",
-"pre_shared_key": "",
-"allowed_ips": [
-"0.0.0.0/0",
-"::/0"
-],
-"persistent_keepalive_interval": 600,
-"reserved": "${reserved}"
-}
-],
-"detour": "direct"
-}`;
-	    const content = wireGuardText || "No configuration available";
-    if (content === "No configuration available") {
-        showPopup('No configuration to download', 'Ошибка');
-        return;
-    }
-    downloadConfig(`HusiWARP_${randomNumber}.conf`, content);
-    showPopup('Скачивание конфигурации');
-    } catch (error) {
-        console.error('Error processing configuration:', error);
-showPopup('Failed to generate config. Please try again.', 'error');
-    } finally {
-        button.disabled = false;
-        button.classList.remove("button--loading");
-    } 
-});
-
-// Karing
-Karing.addEventListener('click', async () => {
-    	const button = document.getElementById('generateButton9');
-    const status = document.getElementById('status');
-    const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
-    button.disabled = true;
-    button.classList.add("button--loading");
-    try {
-        const { publicKey, privateKey } = await fetchKeys();
-        const installId = generateRandomString(22);
-        const fcmToken = `${installId}:APA91b${generateRandomString(134)}`;
-        const accountData = await fetchAccount(publicKey, installId, fcmToken);
-		const reserved = generateReserved(accountData.config.client_id);
-		const wireGuardText = `{
-  "outbounds":   [
-{
-"tag": "WARP",
-"reserved": [${reserved}],
-"mtu": 1280,
-"fake_packets": "5-10",
-"fake_packets_size": "40-100",
-"fake_packets_delay": "20-250",
-"fake_packets_mode": "m4",
-"private_key": "${privateKey}",
-"type": "wireguard",
-"local_address": ["${accountData.config.interface.addresses.v4}/32", "${accountData.config.interface.addresses.v6}/128"],
-"peer_public_key": "${accountData.config.peers[0].public_key}",
-"server": "162.159.192.1",
-"server_port": 500
-}
-  ]
-}`;
-	    const content = wireGuardText || "No configuration available";
-    if (content === "No configuration available") {
-        showPopup('No configuration to download', 'Ошибка');
-        return;
-    }
-    downloadConfig(`KaringWARP_${randomNumber}.conf`, content);
-    showPopup('Скачивание конфигурации');
-    } catch (error) {
-        console.error('Error processing configuration:', error);
-showPopup('Failed to generate config. Please try again.', 'error');
+showPopup('Ошибка. Подождите несколько минут или воспользуйтесь <a href="https://warp-generator-config.vercel.app/" target="_blank" style="color: #fff; text-decoration: underline; font-weight: bold;">зеркалом</a>', 'error');
     } finally {
         button.disabled = false;
         button.classList.remove("button--loading");
@@ -746,7 +510,7 @@ showPopup('Failed to generate config. Please try again.', 'error');
 
 // WireSock
 WireSock.addEventListener('click', async () => {
-    const button = document.getElementById('generateButton10');
+    const button = document.getElementById('generateButton5');
     const status = document.getElementById('status');
     const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
     button.disabled = true;
@@ -759,7 +523,7 @@ WireSock.addEventListener('click', async () => {
         const selectedDNS = getSelectedDNS();
         const allowedIPs = getSelectedSites();
         const randomEndpoint = generateRandomEndpoint();
-        const domains = ['ozon.ru', 'apteka.ru', 'mail.ru', 'psbank.ru', 'lenta.ru', 'www.pochta.ru', 'rzd.ru', 'rutube.ru', 'gosuslugi.ru'];
+        const domains = ['apteka.ru', 'psbank.ru', 'lenta.ru', 'www.pochta.ru', 'rzd.ru', 'rutube.ru', 'gosuslugi.ru'];
         const randomDomain = domains[Math.floor(Math.random() * domains.length)];
         
         const wireGuardText = `[Interface]
@@ -781,7 +545,7 @@ H4 = 4
 
 Id = ${randomDomain}
 Ip = quic
-Ib = firefox
+Ib = curl
 
 [Peer]
 PublicKey = ${accountData.config.peers[0].public_key}
@@ -797,7 +561,7 @@ Endpoint = ${randomEndpoint}`;
         showPopup('Скачивание конфигурации');
     } catch (error) {
         console.error('Error processing configuration:', error);
-        showPopup('Failed to generate config. Please try again.', 'error');
+        showPopup('Ошибка. Подождите несколько минут или воспользуйтесь <a href="https://warp-generator-config.vercel.app/" target="_blank" style="color: #fff; text-decoration: underline; font-weight: bold;">зеркалом</a>', 'error');
     } finally {
         button.disabled = false;
         button.classList.remove("button--loading");
@@ -809,6 +573,9 @@ document.getElementById('telegramButton').onclick = function() {
     window.location.href = 'https://t.me/warp_1_1_1_1';
 }
 
+document.getElementById('projectsButton').onclick = function() {
+    window.location.href = 'https://my-other-projects.vercel.app/';
+}
 
 document.getElementById('promoButton').onclick = function() {
     window.location.href = 'https://storage.googleapis.com/amnezia/amnezia.org?m-path=premium&arf=VG755WBZDBAPGGYM';
@@ -869,8 +636,6 @@ const modal = document.getElementById("infoModal");
 const infoBtn = document.getElementById("infoButton");
 const infoBtn2 = document.getElementById("infoButton2"); // новая кнопка
 const span = document.getElementsByClassName("close")[0];
-const span1 = document.getElementById("close2");
-const modal2 = document.getElementById("ThroneModal");
 
 function lockBodyScroll() {
     document.body.style.overflow = 'hidden';
@@ -898,13 +663,6 @@ if (infoBtn2) {
 // Закрытие по клику на крестики
 span.onclick = function() {
     modal.style.display = "none";
-    modal2.style.display = "none";
-    unlockBodyScroll(); // Разблокируем прокрутку
-}
-
-span1.onclick = function() {
-    modal.style.display = "none";
-    modal2.style.display = "none";
     unlockBodyScroll(); // Разблокируем прокрутку
 }
 
@@ -914,19 +672,7 @@ window.onclick = function(event) {
         modal.style.display = "none";
         unlockBodyScroll();
     }
-    if (event.target == modal2) {
-        modal2.style.display = "none";
-        unlockBodyScroll();
-    }
 }
-
-// Обработчик кнопки копирования в модальном окне Throne
-document.getElementById('copyThroneButton').addEventListener('click', function() {
-    const throneText = document.getElementById('throneText');
-    throneText.select();
-    document.execCommand('copy');
-    showPopup('Конфигурация скопирована!');
-});
 
 // Функция для проверки выбранных сайтов и управления toggle
 function updateToggleState() {
@@ -1016,12 +762,11 @@ function updateRadioButtonsState() {
     const siteOptions = document.querySelectorAll('.Sites .payment-option');
     const siteCheckboxes = document.querySelectorAll('input[name="sites"]');
     
-    // Блокируем/разблокируем радио-кнопки server
+
     serverRadios.forEach(radio => {
         radio.disabled = isBlocking;
     });
     
-    // Визуальные эффекты для server-опций
     serverOptions.forEach(option => {
         if (isBlocking) {
             option.style.opacity = '0.5';
@@ -1034,12 +779,11 @@ function updateRadioButtonsState() {
         }
     });
     
-    // Блокируем/разблокируем чекбоксы сайтов
+
     siteCheckboxes.forEach(checkbox => {
         checkbox.disabled = isBlocking;
     });
     
-    // Визуальные эффекты для опций сайтов
     siteOptions.forEach(option => {
         if (isBlocking) {
             option.style.opacity = '0.5';
@@ -1070,8 +814,6 @@ function resetServerToDefault() {
     const defaultServer = document.getElementById('def');
     if (defaultServer) {
         defaultServer.checked = true;
-        
-        // Обновляем визуальное состояние server-опций
         document.querySelectorAll('.server-option').forEach(option => {
             option.classList.remove('server-option--checked');
         });
@@ -1091,10 +833,8 @@ document.addEventListener('DOMContentLoaded', function() {
         radio.addEventListener('change', function() {
             // Если выбран блокирующий DNS
             if (isBlockingDNS()) {
-                // Сбрасываем сервер на стандартный
+
                 resetServerToDefault();
-                
-                // Сбрасываем все выбранные сайты
                 resetSelectedSites();
                 
                 // Сбрасываем все остальные payment-радио (кроме текущего)
@@ -1110,15 +850,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
-            // Обновляем состояние блокировки
             updateRadioButtonsState();
         });
     });
-    
-    // Инициализация при загрузке страницы
     updateRadioButtonsState();
-    
+	
     // Добавляем обработчики для server-радио, чтобы они нормально работали после разблокировки
     const serverRadios = document.querySelectorAll('input[name="server"]');
     serverRadios.forEach(radio => {
