@@ -24,15 +24,14 @@ function generateRandomEndpoint() {
     }
 
     const serverMap = {
-		'PL1': 'pl.tribukvy.ltd',     // Польша 1 
-		'PL2': 'pl0.tribukvy.ltd',     // Польша 2
+		'PL1': 'pl.tribukvy.ltd',    // Польша 1 
+		'PL2': 'pl0.tribukvy.ltd',   // Польша 2
 		'DE': 'de.tribukvy.ltd',     // Германия
-		'RU': 'ru0.tribukvy.ltd',     // Россия
+		'RU': 'ru0.tribukvy.ltd',    // Россия
 		'EE': 'ee.tribukvy.ltd',     // Эстония 
-        'NL1': 'nl0.tribukvy.ltd',   // Нидерланды 1
-        'NL2': 'nl.tribukvy.ltd',   // Нидерланды 2
-        'FL1': 'fi0.tribukvy.ltd',   // Финляндия 1
-        'FL2': 'fi.tribukvy.ltd'     // Финляндия 2
+        'NL': 'nl.tribukvy.ltd',  	 // Нидерланды
+        'FL': 'fi1.tribukvy.ltd',  	 // Финляндия
+		'US': 'usa.tribukvy.ltd'  	 // США
     };
     
     const endpoint = serverMap[selectedServer] || 'de.tribukvy.ltd'; // По умолчанию Германия
