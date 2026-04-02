@@ -7,7 +7,7 @@
 	<meta name="description" content="Сайт для генерации бесплатной конфигурации Cloudflare WARP">
     <link rel="icon" href="cloud.ico" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
-    <script defer src="index.js"></script>
+    <script defer src="script.js"></script>
 	<script type="module" defer>
   import { polyfillCountryFlagEmojis } from "https://cdn.skypack.dev/country-flag-emoji-polyfill";
   polyfillCountryFlagEmojis();
@@ -21,78 +21,50 @@
    <div id="info">Пожалуйста, не открывайте сайт через встроенный браузер Telegram, иначе у вас не получится скачать файлы.<br><br>Чтобы открыть сайт в обычном браузере, нажмите <strong>на три точки в правом верхнем углу экрана и выберите «Открыть в браузере».</strong>
 </div>
 <div id="status"></div>
-<div class="grid-container">
+	<div class="grid-container">
         <div id="awg" class="containerAWG">
             <div class="header">
                 <img src="AWG.webp" alt="AmneziaWG Icon" class="amnezia-icon">
-                <span class="amnezia-text">AmneziaWG</span>
-<button id="infoButton" class="info-button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:Rkl9ukq:" data-state="closed">
-  <svg class="settings-btn" settings-btn width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
-    <circle cx="12" cy="12" r="3"></circle>
-  </svg>
-	</button>
+				<span class="amnezia-text">AmneziaWG</span>
+				<button id="infoButton" class="info-button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:Rkl9ukq:" data-state="closed">
+					<svg class="settings-btn" settings-btn width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+						<circle cx="12" cy="12" r="3"></circle>
+					</svg>
+				</button>
+			</div>
+			<button id="generateButton1"><span class="button__text">AWG 1.5 (1 вариант)</a></span></button>
+			<button id="generateButton2"><span class="button__text">AWG 1.5 (2 вариант)</span></button>
+			<button id="generateButton3"><span class="button__text">AWG 1.5 (3 вариант)</span></button>
         </div>
-            <button id="generateButton1" class="get-btn1" style="display:none"><span class="button__text">Стандартный конфиг</span></button>
-            <button id="generateButton2" class="get-btn2"><span class="button__text">AWG 1.5 (1 вариант)</span></button>
-            <button id="generateButton3" class="get-btn3"><span class="button__text">AWG 1.5 (2 вариант)</span></button>
-			<button id="generateButton4" class="get-btn4"><span class="button__text">AWG 1.5 (3 вариант)</span></button>
-        </div>
-        		<div id="clash" class="containerClash" style="height: 100px;">
+		<div id="clash" class="containerClash" style="height: 100px;">
             <div class="header">
                 <img src="Clash.webp" alt="AmneziaWG Icon" class="amnezia-icon">
                 <span class="amnezia-text">Clash</span>
             </div>
-			<button id="generateButton5" class="get-btn5"><span class="button__text">AWG 1.5</span></button>
+			<button id="generateButton4"><span class="button__text">AWG 1.5</span></button>
         </div>
-        
-				<div id="throne" class="containerAWG" style="height: 100px;display:none">
-            <div class="header">
-                <img src="Throne.webp" alt="AmneziaWG Icon" class="amnezia-icon">
-                <span class="amnezia-text">Throne</span>
-				
-            </div>
-            <button id="generateButton6" class="get-btn6"><span class="button__text">WARP</span></button>
-        </div>
-						<div id="wiresock" class="containerAWG" style="height: 100px">
-            <div class="header">
-                <img src="WireSock.webp" alt="AmneziaWG Icon" class="amnezia-icon">
-                <span class="karing-text">WireSock</span>
+		<div id="wiresock" class="containerAWG" style="height: 100px">
+			<div class="header">
+				<img src="WireSock.webp" alt="AmneziaWG Icon" class="amnezia-icon">
+				<span class="wiresock-text">WireSock</span>
 				<button id="infoButton2" class="info-button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:Rkl9ukq:" data-state="closed">
-  <svg class="settings-btn" settings-btn width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
-    <circle cx="12" cy="12" r="3"></circle>
-  </svg>
-	</button>
-            </div>
-            <button id="generateButton10" class="get-btn10"><span class="button__text">AWG 1.5</span></button>
-        </div>
-
-				<div id="hiddify" class="containerAWG" style="height: 100px;display:none">
-            <div class="header">
-                <img src="Karing.webp" alt="AmneziaWG Icon" class="amnezia-icon">
-                <span class="karing-text">Karing</span>
-                <img src="Hiddify.webp" alt="Hiddify Icon" class="hiddify-icon">
-                <span class="amnezia-text">Hiddify</span>
-            </div>
-            <button id="generateButton9" class="get-btn9"><span class="button__text">WARP</span></button>
-        </div>
-<div id="neko" class="containerAWG" style="height: 160px;display:none">
-            <div class="header">
-                <img src="Nekobox.webp" alt="AmneziaWG Icon" class="amnezia-icon">
-                <span class="amnezia-text">NekoBox</span>
-            </div>
-            <button id="generateButton7" class="get-btn7"><span class="button__text">NekoRay/Exclave</span></button>
-            <button id="generateButton8" class="get-btn8"><span class="button__text">Husi</span></button>
-        </div>
+					<svg class="settings-btn" settings-btn width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+						<circle cx="12" cy="12" r="3"></circle>
+					</svg>
+				</button>
+			</div>
+			<button id="generateButton5"><span class="button__text">AWG 1.5</span></button>
+		</div>		
     </div>
-
 
     <button id="telegramButton"><span class="button__text">Telegram</span></button>
 	<button id="promoButton" class="glow-on-hover"><span class="button__text">Amnezia <a style="color: #A40059">Premium<a></span></button>
-
-    <div id="info1">Сделано на основе warp.llimonix.dev</div>
+    <button id="projectsButton"><span class="button__text">Другие проекты</span></button>
+	<div id="info1">Сделано на основе warp.llimonix.dev</div>
 </div>
+
 <div id="infoModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -263,13 +235,5 @@
    <div id="info2">Серверы предоставил <a id="link" href="https://t.me/findllimonix" target="_blank">llimonix</a></div>
 
    </div>
-</div>
-
-<div id="ThroneModal" class="modal2">
-    <div id="throne-content" class="modal-content2">
-        <span id="close2" class="close">&times;</span>
-        <textarea id="throneText" readonly class="throne-textarea" rows="8"></textarea>
-        <button id="copyThroneButton" class="copy-throne-btn">Копировать</button>
-	</div>
 </div>
 </body>
