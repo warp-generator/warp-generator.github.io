@@ -379,7 +379,7 @@ select,
 label,
 .toggle-switch {
 	-webkit-tap-highlight-color: transparent;
-	outline: none !important;
+	outline: none;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -505,8 +505,68 @@ label,
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
 }
 
+textarea:focus { outline: 1px solid #EF9551; }
+textarea{
+	border-radius: 2px;
+	border: 1px solid #888891;
+	max-height: 20px;
+	resize:none;
+	margin-bottom: -3px;
+	max-width: 140px;
+	white-space: nowrap; 
+    overflow-y: hidden; 
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
+}
+
+.ipv6 {margin-right: 67px;}
+.i1 {
+	margin-left: 12px;
+	width: 135px;
+}
+
+.keepalive-container, .i1 {
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.keepalive-container.visible, .i1.visible {
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+	opacity: 1;
+    visibility: visible;
+}
+
+.options {
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s ease-out, margin 0.3s ease-out;
+    margin-top: 0;
+}
+
+.options.show {
+    max-height: 150px;
+    opacity: 1;
+	transition: max-height 0.2s ease-out, opacity 0.5s ease-out, margin 0.3s ease-out;
+    margin-top: 10px;
+}
+
+.i2 {
+	min-width: 100%;
+	border: none;
+	margin-top: 10px;
+	white-space: wrap; 
+	max-height: none;
+	word-break: break-all;
+	box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+	background-color: #F4F4F4;
+}
+.i2:focus { outline: none }
 
 @media (max-width: 700px) {
+	.i1 {
+	width: 125px;
+}
 	
 	.modal-content {
     max-width: 346px;
