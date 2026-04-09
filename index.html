@@ -236,7 +236,7 @@
   </label>	
 </div>		
    <div id="info2">Не стандартные сервера требуют регистрации в <a id="link" href="https://t.me/warp_generator_bot?start=user_cabinet" target="_blank">Telegram боте</a> от llimonix</div>
-	<div class="modal-line" style="justify-content: normal"><span style="cursor: pointer;" id="optionsToggle">
+	<div class="modal-line" style="justify-content: normal" id="optionsName"><span style="cursor: pointer;" id="optionsToggle">
 	Дополнительные настройки <svg id="optionsArrow" width="20" height="20" viewBox="0 0 16 17" style="margin-left: 5px; margin-bottom: -4px; transition: transform 0.3s ease;" fill="none"> <path d="M1.49691 5.4902L2.20391 4.7832L8.00041 10.5797L13.7969 4.7832L14.5039 5.4902L8.00041 11.994L1.49691 5.4902Z" fill="#FF6633"></path></svg></span></div>
 		<div class="options" id="optionsDiv">
 			<label class="toggle">
@@ -244,12 +244,12 @@
 				<div class="toggle-switch"></div>
 				<span class="toggle-label ipv6">IPv6</span>
 			</label>
-			<label class="toggle">
+			<label class="toggle" id="keepname">
 				<input class="toggle-checkbox" type="checkbox" id="keeptogggle">
 				<div class="toggle-switch"></div>
 				<span class="toggle-label">PersistentKeepalive <span class="keepalive-container">=&nbsp<textarea spellcheck="false" id="keepalive"  rows="1" maxlength="3" wrap="off" placeholder="25" style="width: 20px; text-align: center;"></textarea></span></span>
 			</label>	
-			<label class="toggle">
+			<label class="toggle" style="text-align: inherit; text-wrap-style: auto">
 				<input class="toggle-checkbox" type="checkbox" id="i1toggle">
 				<div class="toggle-switch"></div>
 				<span class="toggle-label">Собственный I1<textarea spellcheck="false" id="i1" class="i1" rows="1" placeholder="Введите домен"></textarea></span>
