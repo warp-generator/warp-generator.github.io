@@ -583,6 +583,9 @@ textarea{
 		max-width: 90%;
 	}
 	
+	#optionsName {display: block ruby}
+	.options.show {max-height: 200px}
+	.toggle-label {padding-right: 0}
 	#wiresock {display:none}
 	#logo {max-width: 90%}   
     #status {display: none}
@@ -599,10 +602,16 @@ textarea{
 		margin: 0;
 	}
 	
+	#keepname {
+		display: block ruby;
+		text-align: initial;
+	}
+	
 	.grid-container {
         grid-template-columns: none;
         grid-auto-columns: 100%;
 	}
 	
+
 	.info-button {left: 37px;}
 }
