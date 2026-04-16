@@ -128,9 +128,10 @@ const fetchFullConfig = async () => {
     
     const endpoints = [
         'https://www.warp-generator.workers.dev',				// 0
-        'https://warp.sub-aggregator.workers.dev',				// 1
-		'https://warp-vercel-murex.vercel.app/api/warp-data',	// 2
-		'https://warp-vercel-chi.vercel.app/api/warp-data'		// 3
+		'https://warp-gen.netlify.app/',						// 1
+        'https://warp.sub-aggregator.workers.dev',				// 2
+		'https://warp-vercel-murex.vercel.app/api/warp-data',	// 3
+		'https://warp-vercel-chi.vercel.app/api/warp-data'		// 4
     ];
     
     let lastError;
