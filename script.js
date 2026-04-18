@@ -488,6 +488,14 @@ rules:
 - name: "🇷🇺 RU"
   <<: [ *warp-common, *awg ]
   server: ru0.tribukvy.ltd
+  port: 500
+- name: "🇩🇪 DE"
+  <<: [ *warp-common, *awg ]
+  server: de.tribukvy.ltd
+  port: 500
+- name: "🇱🇻 LV"
+  <<: [ *warp-common, *awg ]
+  server: lv.tribukvy.ltd
   port: 500`;
 			proxyg = `proxy-groups:
 - name: WARP + llimonix
@@ -503,6 +511,8 @@ rules:
     - "🇳🇱 NL"
     - "🇫🇮 FI"
     - "🇷🇺 RU"
+    - "🇱🇻 LV"
+    - "🇩🇪 DE"
   url: 'http://speed.cloudflare.com/'
   interval: 300
 rules:
