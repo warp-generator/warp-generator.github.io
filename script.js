@@ -203,6 +203,7 @@ const downloadConfig = (fileName, content) => {
 
 // AWGm1
 AWGm1.addEventListener('click', async () => {
+  showWarningIfNeeded(async () => {
 	const button = document.getElementById('generateButton1');
     const status = document.getElementById('status');
 	const randomEndpoint = generateRandomEndpoint();
@@ -276,12 +277,13 @@ showPopup('Ошибка. Подождите несколько минут или
         button.disabled = false;
         button.classList.remove("button--loading");
     } 
-	
+ });
 });
 
 // AWGm2
 AWGm2.addEventListener('click', async () => {
-    	const button = document.getElementById('generateButton2');
+ showWarningIfNeeded(async () => {
+    const button = document.getElementById('generateButton2');
     const status = document.getElementById('status');
 	const randomEndpoint = generateRandomEndpoint();
     const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
@@ -354,10 +356,12 @@ showPopup('Ошибка. Подождите несколько минут или
         button.classList.remove("button--loading");
     } 
 });
+ });
 
 // AWGm3
 AWGm3.addEventListener('click', async () => {
-    	const button = document.getElementById('generateButton3');
+ showWarningIfNeeded(async () => {	
+    const button = document.getElementById('generateButton3');
     const status = document.getElementById('status');
 	const randomEndpoint = generateRandomEndpoint();
     const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
@@ -430,6 +434,7 @@ showPopup('Ошибка. Подождите несколько минут или
         button.disabled = false;
         button.classList.remove("button--loading");
     } 
+});
 });
 
 // Clash
@@ -608,6 +613,7 @@ showPopup('Ошибка. Подождите несколько минут или
 
 // WireSock
 WireSock.addEventListener('click', async () => {
+	showWarningIfNeeded(async () => {	
     const button = document.getElementById('generateButton5');
     const status = document.getElementById('status');
     const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
@@ -687,7 +693,7 @@ Endpoint = ${randomEndpoint}${persistentKeepalive}`;
         button.classList.remove("button--loading");
     } 
 });
-
+});
 
 document.getElementById('telegramButton').onclick = function() {
     window.location.href = 'https://t.me/warp_1_1_1_1';
@@ -755,11 +761,13 @@ function getSelectedSites() {
 
 const modal = document.getElementById("infoModal");
 const modal2 = document.getElementById("infoModal2");
+const modalw = document.getElementById("warning");
 const infoBtn = document.getElementById("infoButton");
 const infoBtn2 = document.getElementById("infoButton2");
 const infoBtn3 = document.getElementById("infoButton3");
 const span = document.getElementsByClassName("close")[0];
 const span2 = document.getElementsByClassName("close")[1];
+const span3 = document.getElementsByClassName("close")[2];
 
 function lockBodyScroll() {
     document.body.style.overflow = 'hidden';
@@ -778,6 +786,11 @@ function openModal() {
 
 function openModal2() {
     modal2.style.display = "block";
+    lockBodyScroll(); 
+}
+
+function openModal3() {
+    modalw.style.display = "block";
     lockBodyScroll(); 
 }
 
@@ -804,6 +817,11 @@ span2.onclick = function() {
 	modal2.style.display = "none";
     unlockBodyScroll(); 
 }
+	
+span3.onclick = function() {
+	modalw.style.display = "none";
+    unlockBodyScroll(); 	
+}
 
 // Закрытие по клику вне модального окна
 window.onclick = function(event) {
@@ -814,6 +832,11 @@ window.onclick = function(event) {
 	
 	if (event.target == modal2) {
 		modal2.style.display = "none";
+        unlockBodyScroll();
+    };
+	
+	if (event.target == modalw) {
+		modalw.style.display = "none";
         unlockBodyScroll();
     }
 }
@@ -1153,3 +1176,48 @@ const textareas = document.querySelectorAll('textarea');
         });
     });
 }); //
+
+// Функция для проверки выбранного сервера и показа предупреждения
+function showWarningIfNeeded(callback) {
+    const selectedServer = getSelectedServer();
+    const warningModal = document.getElementById("warning");
+    
+    if (selectedServer !== 'def') {
+        // Показываем модальное окно с предупреждением
+        if (warningModal) {
+            warningModal.style.display = "block";
+            lockBodyScroll();
+            
+            // Добавляем обработчик для закрытия модального окна
+            const closeWarning = function() {
+                warningModal.style.display = "none";
+                unlockBodyScroll();
+                removeListeners();
+                // Выполняем колбэк после закрытия
+                if (callback) callback();
+            };
+            
+            const removeListeners = function() {
+                const closeBtn = warningModal.querySelector('.close');
+                if (closeBtn) closeBtn.removeEventListener('click', closeWarning);
+                window.removeEventListener('click', outsideClickHandler);
+            };
+            
+            const outsideClickHandler = function(event) {
+                if (event.target === warningModal) {
+                    closeWarning();
+                }
+            };
+            
+            const closeBtn = warningModal.querySelector('.close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeWarning);
+            }
+            window.addEventListener('click', outsideClickHandler);
+        } else {
+            if (callback) callback();
+        }
+    } else {
+        if (callback) callback();
+    }
+}
