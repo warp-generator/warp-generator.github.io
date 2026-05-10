@@ -69,7 +69,11 @@
     <button id="telegramButton"><span class="button__text">Telegram</span></button>
 	<button id="promoButton" class="glow-on-hover"><span class="button__text">Amnezia <a style="color: #A40059">Premium<a></span></button>
     <button id="projectsButton"><span class="button__text">Другие проекты</span></button>
-	<div id="info1">Сделано на основе warp.llimonix.dev</div>
+		<div id="info1">Сделано на основе ресурсов 
+    <a href="https://warp2.llimonix.pw/" target="_blank" rel="noopener noreferrer">llimonix</a> 
+    и 
+    <a href="https://sageptr.github.io/mini_quic_generator/" target="_blank" rel="noopener noreferrer">sageptr</a>
+		</div>
 </div>
 
 <div id="infoModal" class="modal">
@@ -209,7 +213,7 @@
     <div class="server-option-content">Стандартный</div>
     <input id="def" type="radio" name="server" class="server-radio" checked />
   </label>
-
+  
   <label class="server-option">
     <div class="server-option-content">🇫🇮 Финляндия</div>
     <input id="FL" type="radio" name="server" class="server-radio" />
@@ -234,8 +238,18 @@
     <div class="server-option-content">🇷🇺 Россия</div>
     <input id="RU" type="radio" name="server" class="server-radio" />
   </label>	
+  
+  <label class="server-option">
+    <div class="server-option-content">[LTE] 🇫🇮 Финляндия</div>
+    <input id="lteFL" type="radio" name="server" class="server-radio" />
+  </label>
+    <label class="server-option">
+    <div class="server-option-content">[LTE] 🇵🇱 Польша</div>
+    <input id="ltePL" type="radio" name="server" class="server-radio" />
+  </label>
+  
 </div>		
-   <div id="info2">Не стандартные сервера требуют регистрации в <a id="link" href="https://t.me/warp_generator_bot?start=user_cabinet" target="_blank">Telegram боте</a> от llimonix</div>
+   <div id="info2">Сервера с флагами (кроме [LTE]) требуют регистрации в <a id="link" href="https://t.me/warp_generator_bot?start=user_cabinet" target="_blank">Telegram боте</a> от llimonix</div>
 	<div class="modal-line" style="justify-content: normal" id="optionsName"><span style="cursor: pointer;" id="optionsToggle">
 	Дополнительные настройки <svg id="optionsArrow" width="20" height="20" viewBox="0 0 16 17" style="margin-left: 5px; margin-bottom: -4px; transition: transform 0.3s ease;" fill="none"> <path d="M1.49691 5.4902L2.20391 4.7832L8.00041 10.5797L13.7969 4.7832L14.5039 5.4902L8.00041 11.994L1.49691 5.4902Z" fill="#FF6633"></path></svg></span></div>
 		<div class="options" id="optionsDiv">
