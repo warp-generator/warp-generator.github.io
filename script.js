@@ -12,7 +12,22 @@ function generateRandomEndpoint() {
     let port = ports[Math.floor(Math.random() * ports.length)];
 
     if (selectedServer === 'def') {
-        const prefixes = ["162.159.192.", "162.159.195.", "engage.cloudflareclient.com"];
+        const prefixes = [
+    "162.159.192.",
+    "162.159.195.",
+    "engage.cloudflareclient.com",
+    "8.6.112.",
+    "8.34.70.",
+    "8.34.146.",
+    "8.35.211.",
+    "8.39.125.",
+    "8.39.204.",
+    "8.39.214.",
+    "8.47.69.",
+    "188.114.96.",
+    "188.114.97.",
+    "188.114.98."
+];
         const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
         
         if (prefix === "engage.cloudflareclient.com") {
