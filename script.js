@@ -3,6 +3,7 @@ const AWGm2 = document.getElementById('generateButton2');
 const AWGm3 = document.getElementById('generateButton3');
 const Clash = document.getElementById('generateButton4');
 const WireSock = document.getElementById('generateButton5');
+const ClashMASQUE = document.getElementById('generateButton6');
 const container = document.querySelector('.container');
 
 function generateRandomEndpoint() {
@@ -13,21 +14,21 @@ function generateRandomEndpoint() {
 
     if (selectedServer === 'def') {
         const prefixes = [
-    "162.159.192.",
-    "162.159.195.",
-    "engage.cloudflareclient.com",
-    "8.6.112.",
-    "8.34.70.",
-    "8.34.146.",
-    "8.35.211.",
-    "8.39.125.",
-    "8.39.204.",
-    "8.39.214.",
-    "8.47.69.",
-    "188.114.96.",
-    "188.114.97.",
-    "188.114.98."
-];
+			"162.159.192.",
+			"162.159.195.",
+			"engage.cloudflareclient.com",
+			"8.6.112.",
+			"8.34.70.",
+			"8.34.146.",
+			"8.35.211.",
+			"8.39.125.",
+			"8.39.204.",
+			"8.39.214.",
+			"8.47.69.",
+			"188.114.96.",
+			"188.114.97.",
+			"188.114.98."
+		];
         const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
         
         if (prefix === "engage.cloudflareclient.com") {
@@ -141,6 +142,11 @@ const sessionCache = {
     timestamp: null
 };
 
+const sessionCacheMSQ = {
+    config: null,
+    timestamp: null
+};
+
 const fetchFullConfig = async () => {
     if (sessionCache.config) {
         console.log('Using cached config');
@@ -151,8 +157,8 @@ const fetchFullConfig = async () => {
         'https://www.warp-generator.workers.dev',				// 0
 		'https://warp-gen.netlify.app/',						// 1
         'https://warp.sub-aggregator.workers.dev',				// 2
-		'https://warp-vercel-murex.vercel.app/api/warp-data',	// 3
-		'https://warp-vercel-chi.vercel.app/api/warp-data'		// 4
+		'https://warp-vercel-chi.vercel.app/api/warp-data',		// 3
+		'https://warp-vercel-murex.vercel.app/api/warp-data'	// 4
     ];
     
     let lastError;
@@ -172,6 +178,47 @@ const fetchFullConfig = async () => {
             sessionCache.config = configData;
             
             return configData;
+        } catch (error) {
+            console.warn(`Failed to fetch from ${i}:`, error.message);
+            lastError = error;
+            
+            if (i === endpoints.length - 1) {
+                throw lastError;
+            }
+        }
+    }
+    
+    throw lastError;
+};
+
+const fetchFullConfigMSQ = async () => {
+    if (sessionCacheMSQ.config) {
+        console.log('Using cached config');
+        return sessionCacheMSQ.config;
+    }
+    
+    const endpoints = [
+        'https://www.masque-generator.workers.dev/',				// 0
+		'https://masque-generator.vercel.app/api/warp-data',		// 1
+    ];
+    
+    let lastError;
+    
+    for (let i = 0; i < endpoints.length; i++) {
+        try {
+            console.log(`Trying config endpoint: ${i}`);
+            const response = await fetchWithTimeout(endpoints[i]);
+            
+            if (!response.ok) {
+                throw new Error(`Failed to fetch config from ${i}: ${response.status}`);
+            }
+            
+            const configDataMSQ = await response.json();
+            
+            // Сохраняем в кэш
+            sessionCacheMSQ.config = configDataMSQ;
+            
+            return configDataMSQ;
         } catch (error) {
             console.warn(`Failed to fetch from ${i}:`, error.message);
             lastError = error;
@@ -460,9 +507,40 @@ Clash.addEventListener('click', async () => {
     button.disabled = true;
     button.classList.add("button--loading");
     try {
+	    const msqToggle = document.getElementById('masque');
+		const serversToggle = document.getElementById('servers');
 		const configData = await fetchFullConfig();
 		let awg = ''
+		let msq = ''
+		let msqg = ''
+		let msqp = ''		
 		let proxy = ''
+		if (msqToggle.checked) {
+			const configDataMSQ = await fetchFullConfigMSQ()
+			msq = `msq: &msq
+  type: masque
+  private-key: ${configDataMSQ.privKey}
+  public-key: ${configDataMSQ.peer_pub}
+  ip: ${configDataMSQ.client_ipv4}
+  ipv6: ${configDataMSQ.client_ipv6}
+  mtu: 1280
+  udp: true
+  remote-dns-resolve: true
+  dns: [1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001]`;
+			msqg = `- "MASQUE"
+    - "MASQUE h2"`;
+			msqp = `- name: "MASQUE"
+  server: 162.159.198.2
+  port: 443
+  sni: 4pda.to
+  <<: *msq
+- name: "MASQUE h2"
+  server: 162.159.198.2
+  port: 443
+  sni: 4pda.to
+  network: h2
+  <<: *msq`;
+		}	
 		let proxyg = `proxy-groups:
 - name: WARP
   type: select
@@ -471,12 +549,11 @@ Clash.addEventListener('click', async () => {
     - "Стандартный 1"
     - "Стандартный 2"
     - "Стандартный 3"
+    ${msqg}	
   url: 'http://speed.cloudflare.com/'
   interval: 300
 rules:
 - MATCH,WARP`
-		
-		const serversToggle = document.getElementById('servers');
 		if (serversToggle.checked) {
 			awg = `awg: &awg
   amnezia-wg-option:
@@ -531,6 +608,7 @@ rules:
     - "Стандартный 1"
     - "Стандартный 2"
     - "Стандартный 3"
+    ${msqg}
     - "🇵🇱 PL"
     - "🇳🇱 NL"
     - "🇫🇮 FI"
@@ -558,6 +636,8 @@ rules:
   dns: [1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001]
 
 ${awg}  
+
+${msq}
   
 proxies:
 - name: "Стандартный 1"
@@ -606,8 +686,154 @@ proxies:
    h3: 4   
    i1: <b 0x494e56495445207369703a626f624062696c6f78692e636f6d205349502f322e300d0a5669613a205349502f322e302f55445020706333332e61746c616e74612e636f6d3b6272616e63683d7a39684734624b3737366173646864730d0a4d61782d466f7277617264733a2037300d0a546f3a20426f62203c7369703a626f624062696c6f78692e636f6d3e0d0a46726f6d3a20416c696365203c7369703a616c6963654061746c616e74612e636f6d3e3b7461673d313932383330313737340d0a43616c6c2d49443a20613834623463373665363637313040706333332e61746c616e74612e636f6d0d0a435365713a2033313431353920494e564954450d0a436f6e746163743a203c7369703a616c69636540706333332e61746c616e74612e636f6d3e0d0a436f6e74656e742d547970653a206170706c69636174696f6e2f7364700d0a436f6e74656e742d4c656e6774683a20300d0a0d0a>
    i2: <b 0x5349502f322e302031303020547279696e670d0a5669613a205349502f322e302f55445020706333332e61746c616e74612e636f6d3b6272616e63683d7a39684734624b3737366173646864730d0a546f3a20426f62203c7369703a626f624062696c6f78692e636f6d3e0d0a46726f6d3a20416c696365203c7369703a616c6963654061746c616e74612e636f6d3e3b7461673d313932383330313737340d0a43616c6c2d49443a20613834623463373665363637313040706333332e61746c616e74612e636f6d0d0a435365713a2033313431353920494e564954450d0a436f6e74656e742d4c656e6774683a20300d0a0d0a>
+${msqp}
 
 ${proxy}
+    
+${proxyg}`;
+        const content = wireGuardText || "No configuration available";
+    if (content === "No configuration available") {
+        showPopup('No configuration to download', 'Ошибка');
+        return;
+    }
+    downloadConfig(`ClashWARP_${randomNumber}.yaml`, content);
+    showPopup('Скачивание конфигурации');
+    } catch (error) {
+        console.error('Error processing configuration:', error);
+showPopup('Ошибка. Подождите несколько минут или воспользуйтесь <a href="https://warp-generator-config.vercel.app/" target="_blank" style="color: #fff; text-decoration: underline; font-weight: bold;">зеркалом</a>', 'error');
+    } finally {
+        button.disabled = false;
+        button.classList.remove("button--loading");
+    } 
+});
+
+// ClashMASQUE
+ClashMASQUE.addEventListener('click', async () => {
+    const button = document.getElementById('generateButton6');
+    const status = document.getElementById('status');
+    const randomNumber = Math.floor(Math.random() * (99 - 10 + 1)) + 10;
+    button.disabled = true;
+    button.classList.add("button--loading");
+    try {
+		const configDataMSQ = await fetchFullConfigMSQ()
+		
+		let proxy = 'proxies:'
+		let proxyg = `proxy-groups:
+- name: WARP
+  type: select
+  icon: https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg
+  proxies:
+    - "MASQUE"
+    - "MASQUE h2"		
+  url: 'http://speed.cloudflare.com/'
+  interval: 300
+rules:
+- MATCH,WARP`
+		
+		const serversToggle = document.getElementById('servers');
+		if (serversToggle.checked) {
+			const configData = await fetchFullConfig()
+			proxy = `warp-common: &warp-common
+  type: wireguard
+  ip: ${configData.client_ipv4}
+  ipv6: ${configData.client_ipv6}
+  private-key: ${configData.privKey}
+  public-key: ${configData.peer_pub}
+  allowed-ips: ['0.0.0.0/0']
+  udp: true
+  mtu: 1280
+  remote-dns-resolve: true
+  dns: [1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001]
+  amnezia-wg-option:
+   jc: 4
+   jmin: 40
+   jmax: 70
+   s1: 0
+   s2: 0
+   h1: 1
+   h2: 2
+   h4: 3
+   h3: 4  
+   i1: <b 0xc800000001018800002b45615e996de27ff5ec5f583061ab38eac69fd8fec356802847cd1c7c15a87402bb0a433d4054defedc066e>
+
+proxies:
+- name: "🇵🇱 PL"
+  <<: [ *warp-common ]
+  server: pl.tribukvy.ltd
+  port: 500
+- name: "🇳🇱 NL"
+  <<: [ *warp-common ]
+  server: nl.tribukvy.ltd
+  port: 500  
+- name: "🇫🇮 FI"
+  <<: [ *warp-common ]
+  server: fi.tribukvy.ltd
+  port: 500
+- name: "🇷🇺 RU"
+  <<: [ *warp-common ]
+  server: ru0.tribukvy.ltd
+  port: 500
+- name: "🇩🇪 DE"
+  <<: [ *warp-common ]
+  server: de.tribukvy.ltd
+  port: 500
+- name: "🇱🇻 LV"
+  <<: [ *warp-common ]
+  server: lv.tribukvy.ltd
+  port: 500
+  
+- name: "[LTE] 🇵🇱 PL"
+  <<: [ *warp-common ]
+  server: mpl.tribukvy.ltd
+  port: 500
+- name: "[LTE] 🇫🇮 FI"
+  <<: [ *warp-common ]
+  server: mfi.tribukvy.ltd
+  port: 500`;
+			proxyg = `proxy-groups:
+- name: WARP + llimonix
+  type: select
+  icon: https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg
+  proxies:
+    - "MASQUE"
+    - "MASQUE h2"	
+    - "🇵🇱 PL"
+    - "🇳🇱 NL"
+    - "🇫🇮 FI"
+    - "🇷🇺 RU"
+    - "🇱🇻 LV"
+    - "🇩🇪 DE"
+    - "[LTE] 🇵🇱 PL"
+    - "[LTE] 🇫🇮 FI"
+  url: 'http://speed.cloudflare.com/'
+  interval: 300
+rules:
+- MATCH,WARP + llimonix`;
+		}
+		
+        const wireGuardText = `msq: &msq
+  type: masque
+  private-key: ${configDataMSQ.privKey}
+  public-key: ${configDataMSQ.peer_pub}
+  ip: ${configDataMSQ.client_ipv4}
+  ipv6: ${configDataMSQ.client_ipv6}
+  mtu: 1280
+  udp: true
+  remote-dns-resolve: true
+  dns: [1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001]  
+  
+${proxy}
+- name: "MASQUE"
+  server: 162.159.198.2
+  port: 443
+  sni: 4pda.to
+  <<: *msq
+- name: "MASQUE h2"
+  server: 162.159.198.2
+  port: 443
+  sni: 4pda.to
+  network: h2
+  <<: *msq
     
 ${proxyg}`;
         const content = wireGuardText || "No configuration available";
@@ -1236,3 +1462,32 @@ function showWarningIfNeeded(callback) {
         if (callback) callback();
     }
 }
+
+// MASQUE UI checkbox
+const masqueCheckbox = document.getElementById('masque');
+const wsc = document.getElementById('wiresock');
+const awg = document.getElementById('awg');
+const containerClash = document.querySelector('.containerClash');
+function updateMasqueUI() {
+    const isChecked = masqueCheckbox.checked;
+   
+        if (isChecked) {
+            ClashMASQUE.style.display = 'none';
+			Clash.textContent = 'AWG и MASQUE';
+			containerClash.style.height = '100px';
+			wsc.style.marginTop = '-140px';
+			awg.style.marginTop = '15px';
+        } else {
+            ClashMASQUE.style.display = '';
+			Clash.textContent = 'AWG 2.0';
+			containerClash.style.height = '160px';
+			wsc.style.marginTop = '-96px';
+			awg.style.marginTop = '35px';
+        }
+}
+if (masqueCheckbox) {
+    masqueCheckbox.addEventListener('change', updateMasqueUI);
+}
+document.addEventListener('DOMContentLoaded', function() {
+    updateMasqueUI();
+});
